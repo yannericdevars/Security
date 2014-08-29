@@ -1,0 +1,8 @@
+parameters:
+    megalo_security.class: Megalo\Bundle\SecurityBundle\Services\SecurityService
+
+services:
+    megalo_security:
+        class: %megalo_security.class%
+        arguments: ['@service_container', '@doctrine.orm.entity_manager']
+#        arguments: [@service_id, "plain_value", %parameter%]

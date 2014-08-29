@@ -1,0 +1,4 @@
+megalo_security:
+    resource: "@MegaloSecurityBundle/Resources/config/routing.yml"
+    prefix:   /
+
