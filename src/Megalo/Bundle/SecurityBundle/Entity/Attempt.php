@@ -42,7 +42,12 @@ class Attempt
      */
     private $lastAttempt;
 
-
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="redefine", type="boolean", nullable=true)
+     */
+    private $redefine;
 
 
     /**
@@ -122,6 +127,29 @@ class Attempt
     public function getLastAttempt()
     {
         return $this->lastAttempt;
+    }
+    
+        /**
+     * Set Redefine
+     *
+     * @param boolean $redefine
+     * @return redefine
+     */
+    public function setRedefine($redefine)
+    {
+        $this->redefine = $redefine;
+
+        return $this;
+    }
+
+    /**
+     * Get Redefine
+     *
+     * @return boolean 
+     */
+    public function getRedefine()
+    {
+        return $this->redefine;
     }
 
 

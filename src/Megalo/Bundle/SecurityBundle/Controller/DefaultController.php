@@ -40,4 +40,11 @@ class DefaultController extends Controller
         
         return $this->render('MegaloSecurityBundle:Default:login_success.html.twig');
     }
+    
+    public function loginRedefineAction()
+    {
+        $this->get('megalo_security')->loginRedefine('loginTest');
+        
+        return $this->render('MegaloSecurityBundle:Default:login_redefine.html.twig');
+    }
 }

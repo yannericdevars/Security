@@ -42,7 +42,7 @@ class SecurityService
     }
 
     $countryCode = file_get_contents('http://geoip1.maxmind.com/a?l=JmgjCCOsPHOO&i=' . $ipAdress);
-    
+
 
     $locatorEntity = $this->em->getRepository('MegaloSecurityBundle:LocatorEntity')->findOneBy(array('name' => $name));
 
@@ -50,7 +50,7 @@ class SecurityService
       if ($locatorEntity->getLastCountry() != $countryCode) {
         $message = 'The user : ' . $name . ' was connected in another country. Today : ' . $countryCode . ' Before : ' . $locatorEntity->getLastCountry();
         mail('yannericdevars@gmail.com', 'Security alert', $message);
-        
+
         var_dump("Autre pays");
 
         $locatorEntity->setLastCountry($countryCode);
@@ -103,6 +103,7 @@ class SecurityService
    */
   public function attempt($login)
   {
+
     $autorise = false;
 
     $attempt = $this->em->getRepository('MegaloSecurityBundle:Attempt')->findOneBy(array('login' => $login));
@@ -136,13 +137,36 @@ class SecurityService
     if (!is_object($attempt)) {
       $autorise = true;
     }
+
+    if ($attempt->getRedefine()) {
+      $autorise = $this->verifyRedefine($attempt);
+    }
+
+
     return $autorise;
   }
 
-/**
- * Fonction a appeler si le login a échoué
- * @param string $login Login de l'utilisateur
- */
+  private function verifyRedefine($attempt)
+  {
+    $isAut = true;
+    if ($attempt->getRedefine()) {
+      $lastAttempt = $attempt->getLastAttempt();
+      $now = time();
+
+      $diff = $now - $lastAttempt;
+
+      if ($diff > 60 * 5) {
+        $isAut = false;
+      }
+    }
+
+    return $isAut;
+  }
+
+  /**
+   * Fonction a appeler si le login a échoué
+   * @param string $login Login de l'utilisateur
+   */
   public function loginFail($login)
   {
     $attempt = $this->em->getRepository('MegaloSecurityBundle:Attempt')->findOneBy(array('login' => $login));
@@ -164,7 +188,7 @@ class SecurityService
     $this->em->persist($attempt);
     $this->em->flush();
   }
-  
+
   /**
    * Fonction a appeler si le login a reussi
    * @param string $login Le login de l'utilisateur
@@ -174,10 +198,24 @@ class SecurityService
     $attempt = $this->em->getRepository('MegaloSecurityBundle:Attempt')->findOneBy(array('login' => $login));
 
     if (is_object($attempt)) {
-    $this->em->remove($attempt);
-    $this->em->flush();
+      $this->em->remove($attempt);
+      $this->em->flush();
     }
-    
+  }
+
+  /**
+   * Fonction a appeler si l'e login a reussi'utilisateur a bien redefini son passw
+   * @param string $login Le login de l'utilisateur
+   */
+  public function loginRedefine($login)
+  {
+
+    $attempt = $this->em->getRepository('MegaloSecurityBundle:Attempt')->findOneBy(array('login' => $login));
+
+    if (is_object($attempt)) {
+      $this->em->remove($attempt);
+      $this->em->flush();
+    }
   }
 
 }

@@ -5,7 +5,3 @@ services:
     megalo_security:
         class: %megalo_security.class%
         arguments: ['@service_container', '@doctrine.orm.entity_manager']
-    doctrine.listener:
-        class: Megalo\Bundle\SecurityBundle\Listeners\SecurityListener
-        tags:
-            - { name: doctrine.event_listener, event: persist }

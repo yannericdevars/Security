@@ -17,3 +17,7 @@ megalo_security_login_fail:
 megalo_security_login_success:
     path:     /login/success
     defaults: { _controller: MegaloSecurityBundle:Default:loginSuccess }
+    
+megalo_security_redefine_pass:
+    path:     /login/redefine
+    defaults: { _controller: MegaloSecurityBundle:Default:loginRedefine }
