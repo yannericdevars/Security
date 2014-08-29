@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * LocatorEntity
  *
- * @ORM\Table(name="security_locator")
+ * @ORM\Table(name="security_locators")
  * @ORM\Entity
  */
 class LocatorEntity

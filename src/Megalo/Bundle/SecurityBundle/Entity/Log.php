@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Log
  *
- * @ORM\Table()
+ * @ORM\Table(name="security_logs")
  * @ORM\Entity
  */
 class Log

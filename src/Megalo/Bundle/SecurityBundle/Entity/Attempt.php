@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Attempt
  *
- * @ORM\Table()
+ * @ORM\Table(name="security_attempts")
  * @ORM\Entity
  */
 class Attempt
