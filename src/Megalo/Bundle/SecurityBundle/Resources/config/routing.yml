@@ -1,0 +1,7 @@
+megalo_security_homepage:
+    path:     /login
+    defaults: { _controller: MegaloSecurityBundle:Default:index }
+    
+megalo_security_log_action:
+    path:     /login_go
+    defaults: { _controller: MegaloSecurityBundle:Default:loginGo }
