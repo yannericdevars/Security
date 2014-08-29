@@ -4,6 +4,7 @@ namespace Megalo\Bundle\SecurityBundle\Services;
 
 use \Megalo\Bundle\SecurityBundle\Entity\LocatorEntity;
 use \Megalo\Bundle\SecurityBundle\Entity\Log;
+use Megalo\Bundle\SecurityBundle\Entity\Attempt;
 
 /**
  * Description of SecurityService
@@ -91,6 +92,90 @@ class SecurityService
     $this->em->flush();
   }
 
+  /**
+   * Fonction qui vérifie si l'utilisateur peut tenter la connexion
+   * @param string $login Le login de l'utilisateur
+   * 
+   * @return true S'il a le droit de tenter
+   */
+  public function attempt($login)
+  {
+    $autorise = false;
+
+    $attempt = $this->em->getRepository('MegaloSecurityBundle:Attempt')->findOneBy(array('login' => $login));
+
+    if (is_object($attempt)) {
+      // L'utilisateur est dans la table
+
+      $now = time();
+      $lastAttempt = $attempt->getLastAttempt();
+
+      // Si l'utilisateur a tenté de se loguer plus de 3 fois
+      if ($attempt->getNbAttempts() > 3) {
+
+        // On verifie le temps
+        $lastAttempt = $attempt->getLastAttempt();
+        $now = time();
+
+        $diff = $now - $lastAttempt;
+
+        // Si la connexion date d'il y a une heure on accepte la tentative
+        if ($diff >= 60 * 60) {
+          $autorise = true;
+        }
+      }
+
+      if ($attempt->getNbAttempts() <= 3) {
+        $autorise = true;
+      }
+    }
+
+    if (!is_object($attempt)) {
+      $autorise = true;
+    }
+    return $autorise;
+  }
+
+/**
+ * Fonction a appeler si le login a échoué
+ * @param string $login Login de l'utilisateur
+ */
+  public function loginFail($login)
+  {
+    $attempt = $this->em->getRepository('MegaloSecurityBundle:Attempt')->findOneBy(array('login' => $login));
+
+    if (is_object($attempt)) {
+      $oldAttemps = $attempt->getNbAttempts();
+      $oldAttemps++;
+      $attempt->setNbAttempts($oldAttemps);
+      $attempt->setLastAttempt(time());
+    }
+
+    if (!is_object($attempt)) {
+      $attempt = new Attempt();
+      $attempt->setLogin($login);
+      $attempt->setLastAttempt(time());
+      $attempt->setNbAttempts(1);
+    }
+
+    $this->em->persist($attempt);
+    $this->em->flush();
+  }
+  
+  /**
+   * Fonction a appeler si le login a reussi
+   * @param string $login Le login de l'utilisateur
+   */
+  public function loginSuccess($login)
+  {
+    $attempt = $this->em->getRepository('MegaloSecurityBundle:Attempt')->findOneBy(array('login' => $login));
+
+    if (is_object($attempt)) {
+    $this->em->remove($attempt);
+    $this->em->flush();
+    }
+    
+  }
+
 }
 
-?>

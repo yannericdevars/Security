@@ -18,8 +18,12 @@
         "sensio/distribution-bundle": "2.3.*",
         "sensio/framework-extra-bundle": "2.3.*",
         "sensio/generator-bundle": "2.3.*",
-        "incenteev/composer-parameter-handler": "~2.0",
-        "friendsofsymfony/user-bundle": "~2.0@dev"
+        "incenteev/composer-parameter-handler": "~2.0"
+    },
+    "require-dev": {
+        "phpmd/phpmd" : "2.0.*",
+        "sebastian/phpcpd": "*",
+        "phploc/phploc": "*"
     },
     "scripts": {
         "post-install-cmd": [
