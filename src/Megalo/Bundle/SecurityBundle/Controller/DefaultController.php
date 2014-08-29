@@ -17,7 +17,7 @@ class DefaultController extends Controller
         $this->get('megalo_security')->checkIpValid('test4', $env);
         $this->get('megalo_security')->logChange('test2', "Connexion de l'utilisateur test2");
         
-        return $this->render('MegaloSecurityBundle:Default:loginGo.html.twig');
+        return $this->render('MegaloSecurityBundle:Default:login_go.html.twig');
     }
     
     public function attemptAction()
@@ -41,9 +41,16 @@ class DefaultController extends Controller
         return $this->render('MegaloSecurityBundle:Default:login_success.html.twig');
     }
     
-    public function loginRedefineAction()
+    public function loginRedefineByUserAction()
     {
-        $this->get('megalo_security')->loginRedefine('loginTest');
+        $this->get('megalo_security')->loginRedefineByUser('loginTest');
+        
+        return $this->render('MegaloSecurityBundle:Default:login_redefine.html.twig');
+    }
+    
+    public function loginRedefineByAdminAction()
+    {
+        $this->get('megalo_security')->loginRedefineByAdmin('loginTest');
         
         return $this->render('MegaloSecurityBundle:Default:login_redefine.html.twig');
     }

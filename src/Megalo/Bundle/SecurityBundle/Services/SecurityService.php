@@ -204,16 +204,39 @@ class SecurityService
   }
 
   /**
-   * Fonction a appeler si l'e login a reussi'utilisateur a bien redefini son passw
+   * Fonction a appeler si l'utilisateur a redefini son mot de passe
    * @param string $login Le login de l'utilisateur
    */
-  public function loginRedefine($login)
+  public function loginRedefineByUser($login)
   {
 
     $attempt = $this->em->getRepository('MegaloSecurityBundle:Attempt')->findOneBy(array('login' => $login));
 
     if (is_object($attempt)) {
       $this->em->remove($attempt);
+      $this->em->flush();
+    }
+  }
+
+  /**
+   * Fonction a appeler si l'admin a redefini le mot de passe d'un utilisateur
+   * @param string $login Le login de l'utilisateur
+   */
+  public function loginRedefineByAdmin($login)
+  {
+    
+    $attempt = $this->em->getRepository('MegaloSecurityBundle:Attempt')->findOneBy(array('login' => $login));
+
+    if (!is_object($attempt)) {
+      $attempt = new Attempt();
+      $attempt->setLogin($login);
+    }
+    
+    if (is_object($attempt)) {
+      $attempt->setLastAttempt(time());
+      $attempt->setNbAttempts(1);
+      $attempt->setRedefine(true);
+      $this->em->persist($attempt);
       $this->em->flush();
     }
   }

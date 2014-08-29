@@ -18,6 +18,10 @@ megalo_security_login_success:
     path:     /login/success
     defaults: { _controller: MegaloSecurityBundle:Default:loginSuccess }
     
-megalo_security_redefine_pass:
-    path:     /login/redefine
-    defaults: { _controller: MegaloSecurityBundle:Default:loginRedefine }
+megalo_security_redefine_pass_user:
+    path:     /login/redefineByUser
+    defaults: { _controller: MegaloSecurityBundle:Default:loginRedefineByUser }
+    
+megalo_security_redefine_pass_admin:
+    path:     /login/redefineByAdmin
+    defaults: { _controller: MegaloSecurityBundle:Default:loginRedefineByAdmin }
