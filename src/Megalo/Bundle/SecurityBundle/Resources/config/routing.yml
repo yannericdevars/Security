@@ -5,3 +5,15 @@ megalo_security_homepage:
 megalo_security_log_action:
     path:     /login_go
     defaults: { _controller: MegaloSecurityBundle:Default:loginGo }
+    
+megalo_security_attempt:
+    path:     /attempt
+    defaults: { _controller: MegaloSecurityBundle:Default:attempt }
+    
+megalo_security_login_fail:
+    path:     /login/fail
+    defaults: { _controller: MegaloSecurityBundle:Default:loginFail }
+    
+megalo_security_login_success:
+    path:     /login/success
+    defaults: { _controller: MegaloSecurityBundle:Default:loginSuccess }
