@@ -3,6 +3,7 @@
 namespace Megalo\Bundle\SecurityBundle\Services;
 
 use \Megalo\Bundle\SecurityBundle\Entity\LocatorEntity;
+use \Megalo\Bundle\SecurityBundle\Entity\Log;
 
 /**
  * Description of SecurityService
@@ -36,7 +37,7 @@ class SecurityService
   {
     // Bouchon pour gerer l'environnement
     if ($env === 'dev') {
-      $ipAdress = '189.226.904.800';
+      $ipAdress = '19.226.904.800';
     }
 
     $countryCode = file_get_contents('http://geoip1.maxmind.com/a?l=JmgjCCOsPHOO&i=' . $ipAdress);
@@ -54,6 +55,13 @@ class SecurityService
         $this->em->persist($locatorEntity);
         $this->em->flush();
       }
+
+      if ($locatorEntity->getLastCountry() == $countryCode) {
+        $locatorEntity->setLastConnection(date("Y-m-d H:i:s"));
+
+        $this->em->persist($locatorEntity);
+        $this->em->flush();
+      }
     }
 
     if (!is_object($locatorEntity)) {
@@ -65,6 +73,22 @@ class SecurityService
       $this->em->persist($locatorEntity);
       $this->em->flush();
     }
+  }
+
+  /**
+   * Fonction de log
+   * @param string $name  Nom de l'utilisateur
+   * @param string $value Nouvelle valeur
+   */
+  public function logChange($name, $value)
+  {
+    $log = new Log();
+    $log->setName($name);
+    $log->setValue($value);
+    $log->setModif(date("Y-m-d H:i:s"));
+
+    $this->em->persist($log);
+    $this->em->flush();
   }
 
 }

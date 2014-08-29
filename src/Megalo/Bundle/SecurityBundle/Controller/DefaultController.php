@@ -15,6 +15,7 @@ class DefaultController extends Controller
     {
         $env = $this->container->get('kernel')->getEnvironment();
         $this->get('megalo_security')->checkIpValid('test2', $env);
+        $this->get('megalo_security')->logChange('test2', "Connexion de l'utilisateur test2");
         
         return $this->render('MegaloSecurityBundle:Default:loginGo.html.twig');
     }
